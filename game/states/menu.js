@@ -9,6 +9,7 @@ Menu.prototype = {
   create: function() {
     var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
     this.sprite = this.game.add.sprite(this.game.world.centerX, 138, 'yeoman');
+    // this.sprite = this.game.add.sprite(this.game.world.centerX, 260, 'redPlane');
     this.sprite.anchor.setTo(0.5, 0.5);
 
     this.titleText = this.game.add.text(this.game.world.centerX, 300, '\'Allo, \'Allo!', style);

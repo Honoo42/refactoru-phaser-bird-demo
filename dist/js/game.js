@@ -74,6 +74,7 @@ Menu.prototype = {
   create: function() {
     var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
     this.sprite = this.game.add.sprite(this.game.world.centerX, 138, 'yeoman');
+    // this.sprite = this.game.add.sprite(this.game.world.centerX, 260, 'redPlane');
     this.sprite.anchor.setTo(0.5, 0.5);
 
     this.titleText = this.game.add.text(this.game.world.centerX, 300, '\'Allo, \'Allo!', style);
@@ -137,6 +138,7 @@ Preload.prototype = {
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
     this.load.image('yeoman', 'assets/yeoman-logo.png');
+    // this.load.image('redPlane', 'assets/planeRed1.png');
 
   },
   create: function() {

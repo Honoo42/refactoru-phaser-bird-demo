@@ -1,5 +1,5 @@
 body {
-  background-color: #333;
+  background-color: #8adcf7;
 }
 
 #flappy-u-bird {
@@ -8,4 +8,14 @@ body {
   margin-left: auto;
   margin-right: auto;
   cursor: pointer;
+}
+
+.intro-title{
+	color: firebrick;
+	text-align: center;
+}
+.asset-credit{
+	color: goldenrod;
+	text-align: center;
+	font-weight: 800;
 }

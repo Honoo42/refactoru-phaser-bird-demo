@@ -1,5 +1,5 @@
 body {
-  background-color: #333;
+  background-color: #8adcf7;
 }
 
 #flappy-u-bird {
@@ -9,3 +9,9 @@ body {
   margin-right: auto;
   cursor: pointer;
 }
+
+.intro-title{
+	color: firebrick;
+	text-align: center;
+}
+
