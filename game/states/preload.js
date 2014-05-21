@@ -16,6 +16,7 @@ Preload.prototype = {
     this.load.image('yeoman', 'assets/yeoman-logo.png');
     this.load.image('redPlane', 'assets/planeRed1.png');
     this.load.image('background','assets/background.png');
+    this.load.image('flappy','assets/flappy.png');
 
 
   },
@@ -26,7 +27,7 @@ Preload.prototype = {
     if(!!this.ready) {
       this.game.state.start('menu');
     }
-    
+
   },
   onLoadComplete: function() {
     this.ready = true;

@@ -14,7 +14,7 @@
       // bgtile = this.game.add.tileSprite(0,0, 800,600,'background');
       bgtile = this.game.add.tileSprite(0,0, this.game.stage.bounds.width, this.game.stage.bounds.height,'background');
 
-      Sprite = this.game.add.sprite(this.game.width/4, this.game.height/2, 'yeoman');
+      Sprite = this.game.add.sprite(this.game.width/4, this.game.height/2, 'flappy');
       Enemy = this.game.add.sprite(this.game.width/2, this.game.height/4, 'redPlane');
 
       Sprite.inputEnabled = true;
@@ -41,7 +41,7 @@
       bgtile.tilePosition.x -= 5;
       if (cursors.up.isDown)
     {
-        Sprite.body.velocity.y = -550;
+        Sprite.body.velocity.y = -350;
     }
 
     },

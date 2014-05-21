@@ -73,7 +73,7 @@ Menu.prototype = {
   },
   create: function() {
     var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
-    this.sprite = this.game.add.sprite(this.game.world.centerX, 138, 'yeoman');
+    this.sprite = this.game.add.sprite(this.game.world.centerX, 138, 'flappy');
     // this.sprite = this.game.add.sprite(this.game.world.centerX, 260, 'redPlane');
     this.sprite.anchor.setTo(0.5, 0.5);
 
@@ -112,7 +112,7 @@ module.exports = Menu;
       // bgtile = this.game.add.tileSprite(0,0, 800,600,'background');
       bgtile = this.game.add.tileSprite(0,0, this.game.stage.bounds.width, this.game.stage.bounds.height,'background');
 
-      Sprite = this.game.add.sprite(this.game.width/4, this.game.height/2, 'yeoman');
+      Sprite = this.game.add.sprite(this.game.width/4, this.game.height/2, 'flappy');
       Enemy = this.game.add.sprite(this.game.width/2, this.game.height/4, 'redPlane');
 
       Sprite.inputEnabled = true;
@@ -139,7 +139,7 @@ module.exports = Menu;
       bgtile.tilePosition.x -= 5;
       if (cursors.up.isDown)
     {
-        Sprite.body.velocity.y = -550;
+        Sprite.body.velocity.y = -350;
     }
 
     },
@@ -168,6 +168,7 @@ Preload.prototype = {
     this.load.image('yeoman', 'assets/yeoman-logo.png');
     this.load.image('redPlane', 'assets/planeRed1.png');
     this.load.image('background','assets/background.png');
+    this.load.image('flappy','assets/flappy.png');
 
 
   },
@@ -178,7 +179,7 @@ Preload.prototype = {
     if(!!this.ready) {
       this.game.state.start('menu');
     }
-    
+
   },
   onLoadComplete: function() {
     this.ready = true;
