@@ -4,6 +4,7 @@ function Preload() {
   this.asset = null;
   this.ready = false;
 }
+ var bgtile;
 
 Preload.prototype = {
   preload: function() {
@@ -13,7 +14,9 @@ Preload.prototype = {
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
     this.load.image('yeoman', 'assets/yeoman-logo.png');
-    // this.load.image('redPlane', 'assets/planeRed1.png');
+    this.load.image('redPlane', 'assets/planeRed1.png');
+    this.load.image('background','assets/background.png');
+
 
   },
   create: function() {
@@ -23,6 +26,7 @@ Preload.prototype = {
     if(!!this.ready) {
       this.game.state.start('menu');
     }
+    
   },
   onLoadComplete: function() {
     this.ready = true;
