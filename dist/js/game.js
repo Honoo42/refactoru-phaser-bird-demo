@@ -98,22 +98,49 @@ module.exports = Menu;
 },{}],5:[function(require,module,exports){
 
   'use strict';
+
+  var cursors;
+  var Sprite = this.sprite;
+  var Enemy;
+  var bgtile;
   function Play() {}
   Play.prototype = {
     create: function() {
-      this.game.physics.startSystem(Phaser.Physics.ARCADE);
-      this.sprite = this.game.add.sprite(this.game.width/2, this.game.height/2, 'yeoman');
-      this.sprite.inputEnabled = true;
       
-      this.game.physics.arcade.enable(this.sprite);
-      this.sprite.body.collideWorldBounds = true;
-      this.sprite.body.bounce.setTo(1,1);
-      this.sprite.body.velocity.x = this.game.rnd.integerInRange(-500,500);
-      this.sprite.body.velocity.y = this.game.rnd.integerInRange(-500,500);
+      
+      this.game.physics.startSystem(Phaser.Physics.ARCADE);
+      // bgtile = this.game.add.tileSprite(0,0, 800,600,'background');
+      bgtile = this.game.add.tileSprite(0,0, this.game.stage.bounds.width, this.game.stage.bounds.height,'background');
 
-      this.sprite.events.onInputDown.add(this.clickListener, this);
+      Sprite = this.game.add.sprite(this.game.width/4, this.game.height/2, 'yeoman');
+      Enemy = this.game.add.sprite(this.game.width/2, this.game.height/4, 'redPlane');
+
+      Sprite.inputEnabled = true;
+      
+      this.game.physics.arcade.enable(Sprite);
+      this.game.physics.arcade.enable(Enemy);
+
+      Sprite.body.collideWorldBounds = true;
+      // x and y components
+      Sprite.body.bounce.setTo(0,0);
+      Sprite.body.gravity.y=800;
+      // Sprite.body.velocity.x = this.game.rnd.integerInRange(-500,500);
+      Sprite.body.velocity.x = 0;
+// this.game.rnd.integerInRange(0,5);
+      // Sprite.body.velocity.y = this.game.rnd.integerInRange(-500,500);
+      // Sprite.body.velocity.y = this.game.rnd.integerInRange(0,200);
+
+
+      Sprite.events.onInputDown.add(this.clickListener, this);
+     cursors = this.game.input.keyboard.createCursorKeys();
+      
     },
     update: function() {
+      bgtile.tilePosition.x -= 5;
+      if (cursors.up.isDown)
+    {
+        Sprite.body.velocity.y = -550;
+    }
 
     },
     clickListener: function() {
@@ -129,6 +156,7 @@ function Preload() {
   this.asset = null;
   this.ready = false;
 }
+ var bgtile;
 
 Preload.prototype = {
   preload: function() {
@@ -138,7 +166,9 @@ Preload.prototype = {
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
     this.load.image('yeoman', 'assets/yeoman-logo.png');
-    // this.load.image('redPlane', 'assets/planeRed1.png');
+    this.load.image('redPlane', 'assets/planeRed1.png');
+    this.load.image('background','assets/background.png');
+
 
   },
   create: function() {
@@ -148,6 +178,7 @@ Preload.prototype = {
     if(!!this.ready) {
       this.game.state.start('menu');
     }
+    
   },
   onLoadComplete: function() {
     this.ready = true;
