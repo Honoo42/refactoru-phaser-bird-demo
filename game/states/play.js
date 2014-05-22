@@ -1,16 +1,21 @@
 
   'use strict';
 // enables keyboard interaction
+
   var spaceKey;
+
   // the sprite of the player controlled objects
   var Sprite = this.sprite;
   var Enemy;
   var Ground;
   var PipeGroup = require('../prefabs/pipeGroup.js');
- // var pipeGroup;
+  // sets the variables for the enemy planes input keys
+  var flyLeft;
+  var flyRight;
   
   // condition to make sure that the  up key is tapped
   var keyWasPressed = false;
+
 
   function Play() {}
 
@@ -38,6 +43,9 @@
       console.log("Activate!",this.pipes)
 
       Sprite.inputEnabled = true;
+      Enemy.inputEnabled = true;
+
+
       Sprite.animations.add('flap');  
       Sprite.animations.play('flap', 12, true);
 
@@ -72,7 +80,13 @@
 
 
       Sprite.events.onInputDown.add(this.clickListener, this);
+
       spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+     
+     // Sets the inputs keys for the plane movement to A and D
+      flyLeft = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
+      flyRight = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
 
       this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.generatePipes, this);
       this.pipeGenerator.timer.start();
@@ -103,6 +117,9 @@
       // else Sprite.angle=-45;
       // sets the player character's angle relative to its velocity to simulate a natural arc when it jumps
       Sprite.angle= Math.atan(Sprite.body.velocity.y/250)*180/Math.PI;
+
+     
+
       // when the up key pressed the pc jumps
       if (spaceKey.isDown && keyWasPressed === false)
 
@@ -115,6 +132,13 @@
     // if the up key is not down, set keyWasPressed back to false
     if (!spaceKey.isDown) keyWasPressed = false;
 
+    // Enemy Control!
+    if(flyLeft.isDown) {
+        Enemy.body.velocity.x = -350;
+    }
+    if(flyRight.isDown) {
+        Enemy.body.velocity.x = 350;
+    }
 
     },
     clickListener: function() {
