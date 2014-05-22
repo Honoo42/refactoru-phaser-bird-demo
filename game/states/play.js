@@ -5,29 +5,35 @@
   // the sprite of the player controlled objects
   var Sprite = this.sprite;
   var Enemy;
-  var bgtile;
+  
   // condition to make sure that the  up key is tapped
   var keyWasPressed = false;
+
   function Play() {}
+
   Play.prototype = {
     create: function() {
-      
       
       this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
       //displays the background of the level set to the limits of the game area 
-      bgtile = this.game.add.tileSprite(0,0, this.game.stage.bounds.width, this.game.stage.bounds.height,'background');
+      var bgTile = this.game.add.tileSprite(0,0, this.game.stage.bounds.width, this.game.stage.bounds.height,'background');
+      bgTile.autoScroll(-250, 0);
      // sets the image of the player sprite and its starting location on load
       Sprite = this.game.add.sprite(this.game.width/4, this.game.height/2, 'flappy');
-      
+      console.log(Sprite);
 
       Enemy = this.game.add.sprite(this.game.width/2, this.game.height/4, 'redPlane');
 
       Sprite.inputEnabled = true;
-      
+      Sprite.animations.add('flap');  
+      Sprite.animations.play('flap', 12, true);
+
       this.game.physics.arcade.enable(Sprite);
+      
       this.game.physics.arcade.enable(Enemy);
-      Enemy.body.velocity.x = -100
+
+      Enemy.body.velocity.x = -100;
       Sprite.body.collideWorldBounds = true;
       Enemy.body.collideWorldBounds = true;
 
@@ -53,7 +59,7 @@
       
     },
     update: function() {
-      bgtile.tilePosition.x -= 5;
+     // bgtile.tilePosition.x -= 5;
       // adds collision detection between the player character and an "enemy", when the collision happens, the move to the gameover state 
       var collisionHandler = function(){this.game.state.start('gameover');}
       this.game.physics.arcade.collide(Sprite,Enemy,collisionHandler,null,this);
