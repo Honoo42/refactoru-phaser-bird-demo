@@ -156,8 +156,9 @@ module.exports = Menu;
 
   'use strict';
 // enables keyboard interaction
-  var cursors;
-  var keyboard;
+
+  var spaceKey;
+
   // the sprite of the player controlled objects
   var Sprite = this.sprite;
   var Enemy;
@@ -175,7 +176,7 @@ module.exports = Menu;
 
   Play.prototype = {
     create: function() {
-      
+      this.score=0;
       this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
       //displays the background of the level set to the limits of the game area 
@@ -209,7 +210,7 @@ module.exports = Menu;
 
       this.game.physics.arcade.enable(Ground);
 
-      
+      this.scoreText = this.game.add.text(20, 20, 'score: 0', { fontSize: '40px', fill: 'salmon' });
 
 
       Enemy.body.velocity.x = -100;
@@ -234,7 +235,13 @@ module.exports = Menu;
 
 
       Sprite.events.onInputDown.add(this.clickListener, this);
+<<<<<<< HEAD
      cursors = this.game.input.keyboard.createCursorKeys();
+=======
+
+      spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+>>>>>>> a692fdaabd3646e6566d41c58008d0275abf8a42
      
      // Sets the inputs keys for the plane movement to A and D
       flyLeft = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
@@ -250,10 +257,19 @@ module.exports = Menu;
       var collisionHandler = function(){this.game.state.start('gameover');}
       this.game.physics.arcade.collide(Sprite,Enemy,collisionHandler,null,this);
       this.game.physics.arcade.collide(Sprite,Ground,collisionHandler,null,this);
-     var playThis = this;
+      var playThis = this;
+      
       this.pipes.forEach(function(pipeGroup){
         playThis.game.physics.arcade.collide(Sprite,pipeGroup,collisionHandler,null,playThis);
+       
+        if (pipeGroup.topPipe.x + playThis.game.stage.bounds.width < Sprite.body.x && !pipeGroup.hasScored) {
+          playThis.score++;
+          pipeGroup.hasScored = true;
+        }
+
       });
+     
+      this.scoreText.setText(this.score.toString());
       // when up key is pressed and it was not recently pressed, than jump the character and set keyWasPressed to true
 
       // if (Sprite.body.velocity.y > 0) Sprite.angle=45;
@@ -264,7 +280,7 @@ module.exports = Menu;
      
 
       // when the up key pressed the pc jumps
-      if (cursors.up.isDown && keyWasPressed === false)
+      if (spaceKey.isDown && keyWasPressed === false)
 
 
     {
@@ -273,7 +289,7 @@ module.exports = Menu;
         keyWasPressed = true;
     }
     // if the up key is not down, set keyWasPressed back to false
-    if (!cursors.up.isDown) keyWasPressed = false;
+    if (!spaceKey.isDown) keyWasPressed = false;
 
     // Enemy Control!
     if(flyLeft.isDown) {
