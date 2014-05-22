@@ -27,10 +27,14 @@
       
       this.game.physics.arcade.enable(Sprite);
       this.game.physics.arcade.enable(Enemy);
-
+      Enemy.body.velocity.x = -100
       Sprite.body.collideWorldBounds = true;
+      Enemy.body.collideWorldBounds = true;
+
       // x and y components
       Sprite.body.bounce.setTo(0,0);
+      Enemy.body.bounce.setTo(1,1);
+
       Sprite.body.gravity.y=800;
       Sprite.body.allowRotation= true;
       Sprite.body.angularDrag=10;
@@ -50,6 +54,9 @@
     },
     update: function() {
       bgtile.tilePosition.x -= 5;
+      // adds collision detection between the player character and an "enemy", when the collision happens, the move to the gameover state 
+      var collisionHandler = function(){this.game.state.start('gameover');}
+      this.game.physics.arcade.collide(Sprite,Enemy,collisionHandler,null,this);
       // when up key is pressed and it was not recently pressed, than jump the character and set keyWasPressed to true
 
       // if (Sprite.body.velocity.y > 0) Sprite.angle=45;
@@ -65,7 +72,6 @@
         
         keyWasPressed = true;
     }
-    console.log(Sprite.body.velocity);
     // if the up key is not down, set keyWasPressed back to false
     if (!cursors.up.isDown) keyWasPressed = false;
 
