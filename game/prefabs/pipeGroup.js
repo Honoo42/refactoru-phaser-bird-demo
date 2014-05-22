@@ -8,7 +8,7 @@ var PipeGroup = function(game, parent) {
   this.topPipe = new Pipe(this.game,0,0,0);
   this.add(this.topPipe);
 
-  this.bottomPipe = new Pipe(this.game, 0, 6 00, 1);
+  this.bottomPipe = new Pipe(this.game, 0, 600, 1);
     this.add(this.bottomPipe);
 
    this.hasScored=false;

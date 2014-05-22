@@ -156,7 +156,7 @@ module.exports = Menu;
 
   'use strict';
 // enables keyboard interaction
-  var cursors;
+  var spaceKey;
   // the sprite of the player controlled objects
   var Sprite = this.sprite;
   var Enemy;
@@ -171,7 +171,7 @@ module.exports = Menu;
 
   Play.prototype = {
     create: function() {
-      
+      this.score=0;
       this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
       //displays the background of the level set to the limits of the game area 
@@ -193,7 +193,6 @@ module.exports = Menu;
       console.log("Activate!",this.pipes)
 
       Sprite.inputEnabled = true;
-      Enemy.inputEnabled = true;
       Sprite.animations.add('flap');  
       Sprite.animations.play('flap', 12, true);
 
@@ -203,7 +202,7 @@ module.exports = Menu;
 
       this.game.physics.arcade.enable(Ground);
 
-      
+      this.scoreText = this.game.add.text(20, 20, 'score: 0', { fontSize: '40px', fill: 'salmon' });
 
 
       Enemy.body.velocity.x = -100;
@@ -228,7 +227,7 @@ module.exports = Menu;
 
 
       Sprite.events.onInputDown.add(this.clickListener, this);
-     cursors = this.game.input.keyboard.createCursorKeys();
+      spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
       this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.generatePipes, this);
       this.pipeGenerator.timer.start();
@@ -240,10 +239,19 @@ module.exports = Menu;
       var collisionHandler = function(){this.game.state.start('gameover');}
       this.game.physics.arcade.collide(Sprite,Enemy,collisionHandler,null,this);
       this.game.physics.arcade.collide(Sprite,Ground,collisionHandler,null,this);
-     var playThis = this;
+      var playThis = this;
+      
       this.pipes.forEach(function(pipeGroup){
         playThis.game.physics.arcade.collide(Sprite,pipeGroup,collisionHandler,null,playThis);
+       
+        if (pipeGroup.topPipe.x + playThis.game.stage.bounds.width < Sprite.body.x && !pipeGroup.hasScored) {
+          playThis.score++;
+          pipeGroup.hasScored = true;
+        }
+
       });
+     
+      this.scoreText.setText(this.score.toString());
       // when up key is pressed and it was not recently pressed, than jump the character and set keyWasPressed to true
 
       // if (Sprite.body.velocity.y > 0) Sprite.angle=45;
@@ -251,7 +259,7 @@ module.exports = Menu;
       // sets the player character's angle relative to its velocity to simulate a natural arc when it jumps
       Sprite.angle= Math.atan(Sprite.body.velocity.y/250)*180/Math.PI;
       // when the up key pressed the pc jumps
-      if (cursors.up.isDown && keyWasPressed === false)
+      if (spaceKey.isDown && keyWasPressed === false)
 
 
     {
@@ -260,31 +268,8 @@ module.exports = Menu;
         keyWasPressed = true;
     }
     // if the up key is not down, set keyWasPressed back to false
-    if (!cursors.up.isDown) keyWasPressed = false;
-   
-    // Enemy/ Player 2 control
+    if (!spaceKey.isDown) keyWasPressed = false;
 
-    if (cursors.left.isDown && keyWasPressed === false)
-
-
-    {
-        Enemy.body.velocity.x = -350;
-        
-        keyWasPressed = true;
-    }
-   
-   
-
-    if (cursors.right.isDown && keyWasPressed === false)
-
-
-    {
-        Enemy.body.velocity.x = 350;
-        
-        keyWasPressed = true;
-    }
-    // if the up key is not down, set keyWasPressed back to false
-   
 
     },
     clickListener: function() {
