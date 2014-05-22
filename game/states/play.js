@@ -5,6 +5,9 @@
   // the sprite of the player controlled objects
   var Sprite = this.sprite;
   var Enemy;
+  var Ground;
+  var PipeGroup = require('../prefabs/pipeGroup.js');
+ // var pipeGroup;
   
   // condition to make sure that the  up key is tapped
   var keyWasPressed = false;
@@ -23,7 +26,16 @@
       Sprite = this.game.add.sprite(this.game.width/4, this.game.height/2, 'flappy');
       console.log(Sprite);
 
+      
+
       Enemy = this.game.add.sprite(this.game.width/2, this.game.height/4, 'redPlane');
+
+      // adds a scrolling ground
+      Ground = this.game.add.tileSprite(0,530,this.game.stage.bounds.width, 0,'ground');
+      Ground.autoScroll(-250, 0);      
+
+      this.pipes = this.game.add.group();
+      console.log("Activate!",this.pipes)
 
       Sprite.inputEnabled = true;
       Sprite.animations.add('flap');  
@@ -32,6 +44,11 @@
       this.game.physics.arcade.enable(Sprite);
       
       this.game.physics.arcade.enable(Enemy);
+
+      this.game.physics.arcade.enable(Ground);
+
+      
+
 
       Enemy.body.velocity.x = -100;
       Sprite.body.collideWorldBounds = true;
@@ -56,6 +73,9 @@
 
       Sprite.events.onInputDown.add(this.clickListener, this);
      cursors = this.game.input.keyboard.createCursorKeys();
+
+      this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.generatePipes, this);
+      this.pipeGenerator.timer.start();
       
     },
     update: function() {
@@ -63,6 +83,11 @@
       // adds collision detection between the player character and an "enemy", when the collision happens, the move to the gameover state 
       var collisionHandler = function(){this.game.state.start('gameover');}
       this.game.physics.arcade.collide(Sprite,Enemy,collisionHandler,null,this);
+      this.game.physics.arcade.collide(Sprite,Ground,collisionHandler,null,this);
+     var playThis = this;
+      this.pipes.forEach(function(pipeGroup){
+        playThis.game.physics.arcade.collide(Sprite,pipeGroup,collisionHandler,null,playThis);
+      });
       // when up key is pressed and it was not recently pressed, than jump the character and set keyWasPressed to true
 
       // if (Sprite.body.velocity.y > 0) Sprite.angle=45;
@@ -85,7 +110,24 @@
     },
     clickListener: function() {
       this.game.state.start('gameover');
-    }
+    },
+    generatePipes: function() {  
+    var pipeY = this.game.rnd.integerInRange(-100, 100);
+    var pipeGroup = new PipeGroup(this.game,this.pipes);
+    
+     
+      // var pipeGroup = this.pipes.getFirstExists(false);
+
+    pipeGroup.y = pipeY;
+    pipeGroup.x = this.game.width;
+
+    //  if(!pipeGroup) {
+    //     pipeGroup = new PipeGroup(this.game, this.pipes);  
+    // }
+    // pipeGroup.reset(this.game.width + pipeGroup.width/2, pipeY);
+    // this.game.physics.arcade.enable(pipeGroup);
+    console.log('generating pipes!');
+},
   };
   
   module.exports = Play;

@@ -15,7 +15,64 @@ window.onload = function () {
 
   game.state.start('boot');
 };
-},{"./states/boot":2,"./states/gameover":3,"./states/menu":4,"./states/play":5,"./states/preload":6}],2:[function(require,module,exports){
+},{"./states/boot":4,"./states/gameover":5,"./states/menu":6,"./states/play":7,"./states/preload":8}],2:[function(require,module,exports){
+'use strict';
+
+var Pipe = function(game, x, y, frame) {
+  Phaser.Sprite.call(this, game, x, y, 'pipe', frame);
+
+  // initialize your prefab here
+
+  this.anchor.setTo(0.5, 0.5);
+  this.game.physics.arcade.enableBody(this);
+
+  this.body.allowGravity = false;
+  this.body.immovable = true;
+  
+};
+
+Pipe.prototype = Object.create(Phaser.Sprite.prototype);
+Pipe.prototype.constructor = Pipe;
+
+Pipe.prototype.update = function() {
+  
+  // write your prefab's specific update code here
+  
+};
+
+module.exports = Pipe;
+
+},{}],3:[function(require,module,exports){
+'use strict';
+var Pipe = require('./pipe');
+
+var PipeGroup = function(game, parent) {
+  Phaser.Group.call(this, game, parent);
+
+  // initialize your prefab here
+  this.topPipe = new Pipe(this.game,0,0,0);
+  this.add(this.topPipe);
+
+  this.bottomPipe = new Pipe(this.game, 0, 600, 1);
+    this.add(this.bottomPipe);
+
+   this.hasScored=false;
+
+   this.setAll('body.velocity.x',-250);
+};
+
+PipeGroup.prototype = Object.create(Phaser.Group.prototype);
+PipeGroup.prototype.constructor = PipeGroup;
+
+PipeGroup.prototype.update = function() {
+  
+  // write your prefab's specific update code here
+
+};
+
+module.exports = PipeGroup;
+
+},{"./pipe":2}],4:[function(require,module,exports){
 
 'use strict';
 
@@ -34,7 +91,7 @@ Boot.prototype = {
 
 module.exports = Boot;
 
-},{}],3:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 
 'use strict';
 function GameOver() {}
@@ -62,7 +119,7 @@ GameOver.prototype = {
 };
 module.exports = GameOver;
 
-},{}],4:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 
 'use strict';
 function Menu() {}
@@ -95,7 +152,7 @@ Menu.prototype = {
 
 module.exports = Menu;
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 
   'use strict';
 // enables keyboard interaction
@@ -103,6 +160,9 @@ module.exports = Menu;
   // the sprite of the player controlled objects
   var Sprite = this.sprite;
   var Enemy;
+  var Ground;
+  var PipeGroup = require('../prefabs/pipeGroup.js');
+ // var pipeGroup;
   
   // condition to make sure that the  up key is tapped
   var keyWasPressed = false;
@@ -121,15 +181,30 @@ module.exports = Menu;
       Sprite = this.game.add.sprite(this.game.width/4, this.game.height/2, 'flappy');
       console.log(Sprite);
 
+      
+
       Enemy = this.game.add.sprite(this.game.width/2, this.game.height/4, 'redPlane');
 
+      // adds a scrolling ground
+      Ground = this.game.add.tileSprite(0,530,this.game.stage.bounds.width, 0,'ground');
+      Ground.autoScroll(-250, 0);      
+
+      this.pipes = this.game.add.group();
+      console.log("Activate!",this.pipes)
+
       Sprite.inputEnabled = true;
+      Enemy.inputEnabled = true;
       Sprite.animations.add('flap');  
       Sprite.animations.play('flap', 12, true);
 
       this.game.physics.arcade.enable(Sprite);
       
       this.game.physics.arcade.enable(Enemy);
+
+      this.game.physics.arcade.enable(Ground);
+
+      
+
 
       Enemy.body.velocity.x = -100;
       Sprite.body.collideWorldBounds = true;
@@ -154,6 +229,9 @@ module.exports = Menu;
 
       Sprite.events.onInputDown.add(this.clickListener, this);
      cursors = this.game.input.keyboard.createCursorKeys();
+
+      this.pipeGenerator = this.game.time.events.loop(Phaser.Timer.SECOND * 2, this.generatePipes, this);
+      this.pipeGenerator.timer.start();
       
     },
     update: function() {
@@ -161,6 +239,11 @@ module.exports = Menu;
       // adds collision detection between the player character and an "enemy", when the collision happens, the move to the gameover state 
       var collisionHandler = function(){this.game.state.start('gameover');}
       this.game.physics.arcade.collide(Sprite,Enemy,collisionHandler,null,this);
+      this.game.physics.arcade.collide(Sprite,Ground,collisionHandler,null,this);
+     var playThis = this;
+      this.pipes.forEach(function(pipeGroup){
+        playThis.game.physics.arcade.collide(Sprite,pipeGroup,collisionHandler,null,playThis);
+      });
       // when up key is pressed and it was not recently pressed, than jump the character and set keyWasPressed to true
 
       // if (Sprite.body.velocity.y > 0) Sprite.angle=45;
@@ -178,16 +261,56 @@ module.exports = Menu;
     }
     // if the up key is not down, set keyWasPressed back to false
     if (!cursors.up.isDown) keyWasPressed = false;
+   
+    // Enemy/ Player 2 control
 
+    if (cursors.left.isDown && keyWasPressed === false)
+
+
+    {
+        Enemy.body.velocity.x = -350;
+        
+        keyWasPressed = true;
+    }
+   
+   
+
+    if (cursors.right.isDown && keyWasPressed === false)
+
+
+    {
+        Enemy.body.velocity.x = 350;
+        
+        keyWasPressed = true;
+    }
+    // if the up key is not down, set keyWasPressed back to false
+   
 
     },
     clickListener: function() {
       this.game.state.start('gameover');
-    }
+    },
+    generatePipes: function() {  
+    var pipeY = this.game.rnd.integerInRange(-100, 100);
+    var pipeGroup = new PipeGroup(this.game,this.pipes);
+    
+     
+      // var pipeGroup = this.pipes.getFirstExists(false);
+
+    pipeGroup.y = pipeY;
+    pipeGroup.x = this.game.width;
+
+    //  if(!pipeGroup) {
+    //     pipeGroup = new PipeGroup(this.game, this.pipes);  
+    // }
+    // pipeGroup.reset(this.game.width + pipeGroup.width/2, pipeY);
+    // this.game.physics.arcade.enable(pipeGroup);
+    console.log('generating pipes!');
+},
   };
   
   module.exports = Play;
-},{}],6:[function(require,module,exports){
+},{"../prefabs/pipeGroup.js":3}],8:[function(require,module,exports){
 
 'use strict';
 function Preload() {
@@ -207,6 +330,10 @@ Preload.prototype = {
     this.load.image('redPlane', 'assets/planeRed1.png');
     this.load.image('background','assets/background.png');
     this.load.spritesheet('flappy','assets/flappySheet.png',53, 36, 3);
+    this.load.image('ground','assets/groundRock.png');
+    this.load.spritesheet('pipe','assets/Pipe_green.png', 80, 400, 2);
+   
+
 
   },
   create: function() {

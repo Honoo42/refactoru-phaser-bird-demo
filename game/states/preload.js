@@ -17,6 +17,10 @@ Preload.prototype = {
     this.load.image('redPlane', 'assets/planeRed1.png');
     this.load.image('background','assets/background.png');
     this.load.spritesheet('flappy','assets/flappySheet.png',53, 36, 3);
+    this.load.image('ground','assets/groundRock.png');
+    this.load.spritesheet('pipe','assets/Pipe_green.png', 80, 400, 2);
+   
+
 
   },
   create: function() {
