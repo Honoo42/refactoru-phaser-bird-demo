@@ -216,8 +216,8 @@ module.exports = Menu;
       Enemy.inputEnabled = true;
 
       // adds the flapping animation to the bird and keeps it on a continual loop
-      Sprite.animations.add('flap');  
-      Sprite.animations.play('flap', 12, true);
+      Sprite.animations.add('flapWings');  
+      Sprite.animations.play('flapWings', 12, true);
 
       // ENABLE PHYSICS ON THE PLAYER, ENEMY, and GROUND
       this.game.physics.arcade.enable(Sprite);
@@ -257,7 +257,7 @@ module.exports = Menu;
 
 
       // Adds an event handler to the bird
-      Sprite.events.onInputDown.add(this.clickListener, this);
+      // Sprite.events.onInputDown.add(this.clickListener, this);
 
       // KEYBOARD INPUTS DECLARATION
       spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -332,10 +332,10 @@ module.exports = Menu;
     }
 
     },
-    clickListener: function() {
-      this.game.state.start('gameover');
-      this.themeSound.stop();
-    },
+    // clickListener: function() {
+    //   this.game.state.start('gameover');
+    //   this.themeSound.stop();
+    // },
     generatePipes: function() {  
     var pipeY = this.game.rnd.integerInRange(-100, 100);
     var pipeGroup = new PipeGroup(this.game,this.pipes);
