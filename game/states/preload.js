@@ -19,9 +19,10 @@ Preload.prototype = {
     this.load.spritesheet('flappy','assets/flappySheet.png',53, 36, 3);
     this.load.image('ground','assets/groundRock.png');
     this.load.spritesheet('pipe','assets/Pipe_green.png', 80, 400, 2);
-   
-
-
+    this.load.audio('score', 'assets/coin10.wav');
+    this.load.audio('flap', 'assets/swish-9.wav');
+    this.load.audio('death', 'assets/death.wav');
+    this.load.audio('theme', 'assets/airship.mp3');
   },
   create: function() {
     this.asset.cropEnabled = false;
