@@ -235,13 +235,9 @@ module.exports = Menu;
 
 
       Sprite.events.onInputDown.add(this.clickListener, this);
-<<<<<<< HEAD
-     cursors = this.game.input.keyboard.createCursorKeys();
-=======
 
       spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
->>>>>>> a692fdaabd3646e6566d41c58008d0275abf8a42
      
      // Sets the inputs keys for the plane movement to A and D
       flyLeft = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
