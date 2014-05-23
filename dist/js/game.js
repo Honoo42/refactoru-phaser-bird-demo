@@ -102,14 +102,16 @@ GameOver.prototype = {
   },
   create: function () {
     this.deathSound.play();
-    var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
+    
+    var style = { font: '65px Arial', fill: '#FCB614', align: 'center'};
+
     this.titleText = this.game.add.text(this.game.world.centerX,100, 'Game Over!', style);
     this.titleText.anchor.setTo(0.5, 0.5);
 
-    this.congratsText = this.game.add.text(this.game.world.centerX, 200, 'You Win!', { font: '32px Arial', fill: '#ffffff', align: 'center'});
+    this.congratsText = this.game.add.text(this.game.world.centerX, 200, "How'd You Like It?", { font: '32px Arial', fill: '#FCB614', align: 'center'});
     this.congratsText.anchor.setTo(0.5, 0.5);
 
-    this.instructionText = this.game.add.text(this.game.world.centerX, 300, 'Click To Play Again', { font: '16px Arial', fill: '#ffffff', align: 'center'});
+    this.instructionText = this.game.add.text(this.game.world.centerX, 300, 'Click To Play Again', { font: '16px Arial', fill: '#FCB614', align: 'center'});
     this.instructionText.anchor.setTo(0.5, 0.5);
   },
   update: function () {
@@ -130,15 +132,15 @@ Menu.prototype = {
 
   },
   create: function() {
-    var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
+    var style = { font: '55px Arial', fill: '#FCB614', align: 'center'};
     this.sprite = this.game.add.sprite(this.game.world.centerX, 138, 'flappy');
     // this.sprite = this.game.add.sprite(this.game.world.centerX, 260, 'redPlane');
     this.sprite.anchor.setTo(0.5, 0.5);
 
-    this.titleText = this.game.add.text(this.game.world.centerX, 300, '\'Allo, \'Allo!', style);
+    this.titleText = this.game.add.text(this.game.world.centerX, 300, 'Welcome ReFactorU Friends!', style);
     this.titleText.anchor.setTo(0.5, 0.5);
 
-    this.instructionsText = this.game.add.text(this.game.world.centerX, 400, 'Click anywhere to play "Click The Yeoman Logo"', { font: '16px Arial', fill: '#ffffff', align: 'center'});
+    this.instructionsText = this.game.add.text(this.game.world.centerX, 400, 'Click anywhere to play the 100 Billionth version of Flappy Bird', { font: '16px Arial', fill: '#FCB614', align: 'center'});
     this.instructionsText.anchor.setTo(0.5, 0.5);
 
     this.sprite.angle = -20;
