@@ -98,9 +98,10 @@ function GameOver() {}
 
 GameOver.prototype = {
   preload: function () {
-
+    this.deathSound = this.game.add.audio('death');
   },
   create: function () {
+    this.deathSound.play();
     var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
     this.titleText = this.game.add.text(this.game.world.centerX,100, 'Game Over!', style);
     this.titleText.anchor.setTo(0.5, 0.5);
@@ -186,7 +187,10 @@ module.exports = Menu;
       Sprite = this.game.add.sprite(this.game.width/4, this.game.height/2, 'flappy');
       console.log(Sprite);
 
-      
+      this.scoreSound = this.game.add.audio('score');
+      this.flapSound = this.game.add.audio('flap');
+      this.themeSound = this.game.add.audio('theme', 0.4, true);
+      this.themeSound.play();
 
       Enemy = this.game.add.sprite(this.game.width/2, this.game.height/4, 'redPlane');
 
@@ -250,7 +254,10 @@ module.exports = Menu;
     update: function() {
      // bgtile.tilePosition.x -= 5;
       // adds collision detection between the player character and an "enemy", when the collision happens, the move to the gameover state 
-      var collisionHandler = function(){this.game.state.start('gameover');}
+      var collisionHandler = function(){
+        this.game.state.start('gameover');
+        this.themeSound.stop();
+    }
       this.game.physics.arcade.collide(Sprite,Enemy,collisionHandler,null,this);
       this.game.physics.arcade.collide(Sprite,Ground,collisionHandler,null,this);
       var playThis = this;
@@ -261,6 +268,7 @@ module.exports = Menu;
         if (pipeGroup.topPipe.x + playThis.game.stage.bounds.width < Sprite.body.x && !pipeGroup.hasScored) {
           playThis.score++;
           pipeGroup.hasScored = true;
+          playThis.scoreSound.play();
         }
 
       });
@@ -281,7 +289,7 @@ module.exports = Menu;
 
     {
         Sprite.body.velocity.y = -350;
-        
+        this.flapSound.play();
         keyWasPressed = true;
     }
     // if the up key is not down, set keyWasPressed back to false
@@ -298,6 +306,7 @@ module.exports = Menu;
     },
     clickListener: function() {
       this.game.state.start('gameover');
+      this.themeSound.stop();
     },
     generatePipes: function() {  
     var pipeY = this.game.rnd.integerInRange(-100, 100);
@@ -341,9 +350,10 @@ Preload.prototype = {
     this.load.spritesheet('flappy','assets/flappySheet.png',53, 36, 3);
     this.load.image('ground','assets/groundRock.png');
     this.load.spritesheet('pipe','assets/Pipe_green.png', 80, 400, 2);
-   
-
-
+    this.load.audio('score', 'assets/coin10.wav');
+    this.load.audio('flap', 'assets/swish-9.wav');
+    this.load.audio('death', 'assets/death.wav');
+    this.load.audio('theme', 'assets/airship.mp3');
   },
   create: function() {
     this.asset.cropEnabled = false;

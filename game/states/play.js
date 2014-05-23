@@ -31,7 +31,10 @@
       Sprite = this.game.add.sprite(this.game.width/4, this.game.height/2, 'flappy');
       console.log(Sprite);
 
-      
+      this.scoreSound = this.game.add.audio('score');
+      this.flapSound = this.game.add.audio('flap');
+      this.themeSound = this.game.add.audio('theme', 0.4, true);
+      this.themeSound.play();
 
       Enemy = this.game.add.sprite(this.game.width/2, this.game.height/4, 'redPlane');
 
@@ -95,7 +98,10 @@
     update: function() {
      // bgtile.tilePosition.x -= 5;
       // adds collision detection between the player character and an "enemy", when the collision happens, the move to the gameover state 
-      var collisionHandler = function(){this.game.state.start('gameover');}
+      var collisionHandler = function(){
+        this.game.state.start('gameover');
+        this.themeSound.stop();
+    }
       this.game.physics.arcade.collide(Sprite,Enemy,collisionHandler,null,this);
       this.game.physics.arcade.collide(Sprite,Ground,collisionHandler,null,this);
       var playThis = this;
@@ -106,6 +112,7 @@
         if (pipeGroup.topPipe.x + playThis.game.stage.bounds.width < Sprite.body.x && !pipeGroup.hasScored) {
           playThis.score++;
           pipeGroup.hasScored = true;
+          playThis.scoreSound.play();
         }
 
       });
@@ -126,7 +133,7 @@
 
     {
         Sprite.body.velocity.y = -350;
-        
+        this.flapSound.play();
         keyWasPressed = true;
     }
     // if the up key is not down, set keyWasPressed back to false
@@ -143,6 +150,7 @@
     },
     clickListener: function() {
       this.game.state.start('gameover');
+      this.themeSound.stop();
     },
     generatePipes: function() {  
     var pipeY = this.game.rnd.integerInRange(-100, 100);
