@@ -34,7 +34,10 @@
       Sprite = this.game.add.sprite(this.game.width/4, this.game.height/2, 'flappy');
       console.log(Sprite);
 
+<<<<<<< HEAD
       // add in the sounds of the game
+=======
+>>>>>>> 8bbbb2da2bfa8e347beee30b532bd284b68e0f99
       this.scoreSound = this.game.add.audio('score');
       this.flapSound = this.game.add.audio('flap');
       this.themeSound = this.game.add.audio('theme', 0.4, true);
@@ -118,8 +121,12 @@
       var collisionHandler = function(){
         this.game.state.start('gameover');
         this.themeSound.stop();
+<<<<<<< HEAD
       }
       // sets the collision handler function between the bird and the plane and the bird and the ground
+=======
+    }
+>>>>>>> 8bbbb2da2bfa8e347beee30b532bd284b68e0f99
       this.game.physics.arcade.collide(Sprite,Enemy,collisionHandler,null,this);
       this.game.physics.arcade.collide(Sprite,Ground,collisionHandler,null,this);
       
